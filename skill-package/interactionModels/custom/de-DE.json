@@ -1,0 +1,54 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "slots": [],
+          "name": "HelloWorldIntent",
+          "samples": [
+            "hallo",
+            "wie geht\u0027s dir",
+            "sag hallo welt",
+            "sag hallo"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "slots": [
+            {
+              "name": "xy",
+              "type": "AMAZON.AlphaNumeric"
+            }
+          ],
+          "name": "AttackIntent",
+          "samples": [
+            "Greife {xy} an",
+            "Attackiere {xy}",
+            "Attacke"
+          ]
+        }
+      ],
+      "types": [],
+      "invocationName": "battleship game"
+    }
+  }
+}
