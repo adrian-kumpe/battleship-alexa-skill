@@ -42,10 +42,9 @@ const AttackIntentHandler = {
 
     connectAndRelease((socket, requestCallback) => {
       socket.emit(
-        "login",
+        "alexaTestConnection",
         {
-          name: "alexa",
-          room: { id: "test", player: "1" },
+          test: "Das ist ein Test",
         },
         requestCallback
       );
