@@ -4,6 +4,14 @@
  * session persistence, api calls, and more.
  * */
 const Alexa = require("ask-sdk-core");
+const { io } = require("socket.io-client");
+
+const connectAndRelease = (callback) => {
+  const socket = io("https://battleship-server-4725bfddd6bf.herokuapp.com", {
+    transports: ["websocket"],
+  });
+  callback(socket, socket.disconnect);
+};
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -31,6 +39,17 @@ const AttackIntentHandler = {
   },
   handle(handlerInput) {
     const speakOutput = "Angriff gestartet.";
+
+    connectAndRelease((socket, requestCallback) => {
+      socket.emit(
+        "login",
+        {
+          name: "alexa",
+          room: { id: "test", player: "1" },
+        },
+        requestCallback
+      );
+    });
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
