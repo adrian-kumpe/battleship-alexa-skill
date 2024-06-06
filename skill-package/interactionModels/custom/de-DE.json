@@ -40,15 +40,11 @@
             }
           ],
           "name": "AttackIntent",
-          "samples": [
-            "Greife {xy} an",
-            "Attackiere {xy}",
-            "Attacke"
-          ]
+          "samples": ["Greife {xy} an", "Attackiere {xy}", "Attacke"]
         }
       ],
       "types": [],
-      "invocationName": "battleship game"
+      "invocationName": "schiffe versenken"
     }
   }
 }
