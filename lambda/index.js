@@ -38,6 +38,7 @@ const RoomIntentHandler = {
     );
   },
   handle(handlerInput) {
+      /*
     const roomId =
       handlerInput.requestEnvelope.request.intent.slots.roomId.value;
 
@@ -47,6 +48,8 @@ const RoomIntentHandler = {
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     const speakOutput = `Die Raumnummer ${roomId} wurde gespeichert.`;
+    */
+    const speakOutput = `RoomIntentHandler wurde aufgerufen.`;
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
