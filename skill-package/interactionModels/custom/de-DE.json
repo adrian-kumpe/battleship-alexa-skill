@@ -1,5 +1,26 @@
 {
   "interactionModel": {
+    "dialog": {
+      "intents": [
+        {
+          "slots": [
+            {
+              "name": "roomId",
+              "elicitationRequired": true,
+              "type": "AMAZON.AlphaNumeric",
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1134522012193.335888888041"
+              }
+            }
+          ],
+          "name": "RoomIntent",
+          "confirmationRequired": false,
+          "prompts": {}
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
     "languageModel": {
       "intents": [
         {
@@ -40,11 +61,42 @@
             }
           ],
           "name": "AttackIntent",
-          "samples": ["Greife {xy} an", "Attackiere {xy}", "Attacke"]
+          "samples": [
+            "Greife {xy} an",
+            "Attackiere {xy}",
+            "Attacke"
+          ]
+        },
+        {
+          "slots": [
+            {
+              "name": "roomId",
+              "type": "AMAZON.AlphaNumeric",
+              "samples": [
+                "{roomId}"
+              ]
+            }
+          ],
+          "name": "RoomIntent",
+          "samples": [
+            "Raumnummer {roomId}",
+            "Setze die Raumnummer"
+          ]
         }
       ],
       "types": [],
       "invocationName": "schiffe versenken"
-    }
+    },
+    "prompts": [
+      {
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Welche Raumnummer?"
+          }
+        ],
+        "id": "Elicit.Slot.1134522012193.335888888041"
+      }
+    ]
   }
 }
