@@ -30,6 +30,31 @@ const LaunchRequestHandler = {
   },
 };
 
+const RoomIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === "RoomIntent"
+    );
+  },
+  handle(handlerInput) {
+    const roomId =
+      handlerInput.requestEnvelope.request.intent.slots.roomId.value;
+
+    const sessionAttributes =
+      handlerInput.attributesManager.getSessionAttributes();
+    sessionAttributes.roomId = roomId;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+    const speakOutput = `Die Raumnummer ${roomId} wurde gespeichert.`;
+
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .reprompt(speakOutput)
+      .getResponse();
+  },
+};
+
 const AttackIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -38,17 +63,23 @@ const AttackIntentHandler = {
     );
   },
   handle(handlerInput) {
-    const speakOutput = "Angriff gestartet.";
+    let speakOutput;
+    const roomId = handlerInput.attributesManager.getSessionAttributes().roomId;
 
-    connectAndRelease((socket, requestCallback) => {
-      socket.emit(
-        "alexaTestConnection",
-        {
-          test: "Das ist ein Test",
-        },
-        requestCallback
-      );
-    });
+    if (roomId) {
+      connectAndRelease((socket, requestCallback) => {
+        socket.emit(
+          "alexaTestConnection",
+          {
+            test: "Die Raumnummer lautet: " + roomId,
+          },
+          requestCallback
+        );
+      });
+      speakOutput = "Angriff gestartet.";
+    } else {
+      speakOutput = "Es muss zunächst eine Raumnummer gesetzt werden.";
+    }
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
@@ -203,6 +234,7 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
+    RoomIntentHandler,
     AttackIntentHandler,
     HelloWorldIntentHandler,
     HelpIntentHandler,
