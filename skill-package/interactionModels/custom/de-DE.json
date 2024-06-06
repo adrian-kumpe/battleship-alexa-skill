@@ -10,11 +10,27 @@
               "type": "AMAZON.AlphaNumeric",
               "confirmationRequired": false,
               "prompts": {
-                "elicitation": "Elicit.Slot.1134522012193.335888888041"
+                "elicitation": "Elicit.Slot.1080563264653.199282408785"
               }
             }
           ],
           "name": "RoomIntent",
+          "confirmationRequired": false,
+          "prompts": {}
+        },
+        {
+          "slots": [
+            {
+              "name": "xy",
+              "elicitationRequired": true,
+              "type": "AMAZON.AlphaNumeric",
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.529890641055.1168701635463"
+              }
+            }
+          ],
+          "name": "AttackIntent",
           "confirmationRequired": false,
           "prompts": {}
         }
@@ -57,7 +73,10 @@
           "slots": [
             {
               "name": "xy",
-              "type": "AMAZON.AlphaNumeric"
+              "type": "AMAZON.AlphaNumeric",
+              "samples": [
+                "{xy}"
+              ]
             }
           ],
           "name": "AttackIntent",
@@ -79,8 +98,9 @@
           ],
           "name": "RoomIntent",
           "samples": [
-            "Raumnummer {roomId}",
-            "Setze die Raumnummer"
+            "Verbinde dich mit Raum {roomId}",
+            "Verbinde",
+            "Verbinde {roomId}"
           ]
         }
       ],
@@ -92,10 +112,19 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "Welche Raumnummer?"
+            "value": "Welcher Raum?"
           }
         ],
-        "id": "Elicit.Slot.1134522012193.335888888041"
+        "id": "Elicit.Slot.1080563264653.199282408785"
+      },
+      {
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Welche Koordinate?"
+          }
+        ],
+        "id": "Elicit.Slot.529890641055.1168701635463"
       }
     ]
   }
