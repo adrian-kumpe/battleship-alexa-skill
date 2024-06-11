@@ -68,7 +68,8 @@ const AttackIntentHandler = {
     if (roomId) {
       // roomId === roomId + PlayerNo; i.e. 10001
       const playerNo = roomId.splice(-1);
-      const { x, y } = this.event.request.intent.slots.xy.value.split("");
+      let { x, y } = this.event.request.intent.slots.xy.value.split("");
+      x = x.charCodeAt(0) - 65;
       connectAndRelease((socket, requestCallback) => {
         socket.emit(
           "alexaAttack",
