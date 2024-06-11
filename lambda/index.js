@@ -65,13 +65,17 @@ const AttackIntentHandler = {
   handle(handlerInput) {
     let speakOutput;
     const roomId = handlerInput.attributesManager.getSessionAttributes().roomId;
-
     if (roomId) {
+      // roomId === roomId + PlayerNo; i.e. 10001
+      const playerNo = roomId.splice(-1);
+      const { x, y } = this.event.request.intent.slots.xy.value.split("");
       connectAndRelease((socket, requestCallback) => {
         socket.emit(
-          "alexaTestConnection",
+          "alexaAttack",
           {
-            test: "Die Raumnummer lautet: " + roomId,
+            roomId: roomId,
+            playerNo: playerNo,
+            coord: { x: x, y: y },
           },
           requestCallback
         );
