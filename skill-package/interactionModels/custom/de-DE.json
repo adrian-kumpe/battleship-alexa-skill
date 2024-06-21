@@ -1,0 +1,131 @@
+{
+  "interactionModel": {
+    "dialog": {
+      "intents": [
+        {
+          "slots": [
+            {
+              "name": "roomId",
+              "elicitationRequired": true,
+              "type": "AMAZON.AlphaNumeric",
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1080563264653.199282408785"
+              }
+            }
+          ],
+          "name": "RoomIntent",
+          "confirmationRequired": false,
+          "prompts": {}
+        },
+        {
+          "slots": [
+            {
+              "name": "xy",
+              "elicitationRequired": true,
+              "type": "AMAZON.AlphaNumeric",
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.529890641055.1168701635463"
+              }
+            }
+          ],
+          "name": "AttackIntent",
+          "confirmationRequired": false,
+          "prompts": {}
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "languageModel": {
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "slots": [],
+          "name": "HelloWorldIntent",
+          "samples": [
+            "hallo",
+            "wie geht\u0027s dir",
+            "sag hallo welt",
+            "sag hallo"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "slots": [
+            {
+              "name": "xy",
+              "type": "AMAZON.AlphaNumeric",
+              "samples": [
+                "{xy}"
+              ]
+            }
+          ],
+          "name": "AttackIntent",
+          "samples": [
+            "Greife {xy} an",
+            "Attackiere {xy}",
+            "Attacke"
+          ]
+        },
+        {
+          "slots": [
+            {
+              "name": "roomId",
+              "type": "AMAZON.AlphaNumeric",
+              "samples": [
+                "{roomId}"
+              ]
+            }
+          ],
+          "name": "RoomIntent",
+          "samples": [
+            "Verbinde dich mit Raum {roomId}",
+            "Verbinde",
+            "Verbinde {roomId}"
+          ]
+        }
+      ],
+      "types": [],
+      "invocationName": "change me"
+    },
+    "prompts": [
+      {
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Welcher Raum?"
+          }
+        ],
+        "id": "Elicit.Slot.1080563264653.199282408785"
+      },
+      {
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Welche Koordinate?"
+          }
+        ],
+        "id": "Elicit.Slot.529890641055.1168701635463"
+      }
+    ]
+  }
+}
