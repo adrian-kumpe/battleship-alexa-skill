@@ -5,32 +5,32 @@
         {
           "slots": [
             {
-              "name": "roomId",
+              "name": "xy",
               "elicitationRequired": true,
               "type": "AMAZON.AlphaNumeric",
               "confirmationRequired": false,
               "prompts": {
-                "elicitation": "Elicit.Slot.1080563264653.199282408785"
+                "elicitation": "Elicit.Slot.265062795540.1644612163654"
               }
             }
           ],
-          "name": "RoomIntent",
+          "name": "AttackIntent",
           "confirmationRequired": false,
           "prompts": {}
         },
         {
           "slots": [
             {
-              "name": "xy",
+              "name": "roomId",
               "elicitationRequired": true,
               "type": "AMAZON.AlphaNumeric",
               "confirmationRequired": false,
               "prompts": {
-                "elicitation": "Elicit.Slot.529890641055.1168701635463"
+                "elicitation": "Elicit.Slot.1000933584011.597806227810"
               }
             }
           ],
-          "name": "AttackIntent",
+          "name": "RoomIntent",
           "confirmationRequired": false,
           "prompts": {}
         }
@@ -98,9 +98,9 @@
           ],
           "name": "RoomIntent",
           "samples": [
-            "Verbinde dich mit Raum {roomId}",
-            "Verbinde",
-            "Verbinde {roomId}"
+            "Verbinde mit Raum {roomId} ",
+            "Verbinde {roomId}",
+            "Verbinde"
           ]
         }
       ],
@@ -112,19 +112,19 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "Welcher Raum?"
+            "value": "Welche Koordinate?"
           }
         ],
-        "id": "Elicit.Slot.1080563264653.199282408785"
+        "id": "Elicit.Slot.265062795540.1644612163654"
       },
       {
         "variations": [
           {
             "type": "PlainText",
-            "value": "Welche Koordinate?"
+            "value": "Welche Raumnummer?"
           }
         ],
-        "id": "Elicit.Slot.529890641055.1168701635463"
+        "id": "Elicit.Slot.1000933584011.597806227810"
       }
     ]
   }

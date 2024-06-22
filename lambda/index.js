@@ -30,6 +30,25 @@ const LaunchRequestHandler = {
   },
 };
 
+const HelloWorldIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === "HelloWorldIntent"
+    );
+  },
+  handle(handlerInput) {
+    const speakOutput = "Hello World!";
+
+    return (
+      handlerInput.responseBuilder
+        .speak(speakOutput)
+        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+        .getResponse()
+    );
+  },
+};
+
 const RoomIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -38,15 +57,21 @@ const RoomIntentHandler = {
     );
   },
   handle(handlerInput) {
+    let speakOutput;
     const roomId =
       handlerInput.requestEnvelope.request.intent.slots.roomId.value;
 
-    const sessionAttributes =
-      handlerInput.attributesManager.getSessionAttributes();
-    sessionAttributes.roomId = roomId;
-    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-
-    const speakOutput = `Die Raumnummer ${roomId} wurde gespeichert.`;
+    // check if roomId looks like: roomId + PlayerNo; i.e. 45670
+    if (!/^\d{2}.\d{2}[01]$/.test(roomId)) {
+      speakOutput = `Die Raumnummer ${roomId} entspricht nicht der vorgeschriebenen Form.`;
+    } else {
+      // save roomId in the sessionAttributes
+      const sessionAttributes =
+        handlerInput.attributesManager.getSessionAttributes();
+      sessionAttributes.roomId = roomId;
+      handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+      speakOutput = `Die Raumnummer ${roomId} wurde gespeichert.`;
+    }
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
@@ -65,50 +90,34 @@ const AttackIntentHandler = {
   handle(handlerInput) {
     let speakOutput;
     const roomId = handlerInput.attributesManager.getSessionAttributes().roomId;
-    if (roomId) {
-      // roomId === roomId + PlayerNo; i.e. 10001
-      const playerNo = roomId.splice(-1);
-      let { x, y } = this.event.request.intent.slots.xy.value.split("");
-      x = x.charCodeAt(0) - 65;
-      connectAndRelease((socket, requestCallback) => {
-        socket.emit(
-          "alexaAttack",
-          {
-            roomId: roomId,
-            playerNo: playerNo,
-            coord: { x: x, y: y },
-          },
-          requestCallback
-        );
-      });
-      speakOutput = "Angriff gestartet.";
-    } else {
+    if (!roomId) {
       speakOutput = "Es muss zunächst eine Raumnummer gesetzt werden.";
+    } else {
+      const playerNo = roomId.charAt(roomId.length - 1) * 1;
+      const xy = handlerInput.requestEnvelope.request.intent.slots.xy.value;
+      if (!/^[a-h][1-8]$/.test(xy)) {
+        speakOutput = `Die Koordinate ${xy} entspricht nicht der vorgeschriebenen Form.`;
+      } else {
+        const [x, y] = xy.split("");
+        connectAndRelease((socket, requestCallback) => {
+          socket.emit(
+            "alexaAttack",
+            {
+              roomId: roomId.replace(".", "").slice(0, -1),
+              playerNo: playerNo,
+              coord: { x: x.charCodeAt(0) - 97, y: y - 1 },
+            },
+            requestCallback
+          );
+        });
+        speakOutput = `Angriff auf ${x} ${y} gestartet.`;
+      }
     }
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt(speakOutput)
       .getResponse();
-  },
-};
-
-const HelloWorldIntentHandler = {
-  canHandle(handlerInput) {
-    return (
-      Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) === "HelloWorldIntent"
-    );
-  },
-  handle(handlerInput) {
-    const speakOutput = "Hello World!";
-
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
   },
 };
 
@@ -239,9 +248,9 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
+    HelloWorldIntentHandler,
     RoomIntentHandler,
     AttackIntentHandler,
-    HelloWorldIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
