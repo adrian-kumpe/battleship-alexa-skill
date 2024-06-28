@@ -10,7 +10,7 @@ const connectAndRelease = (callback) => {
   const socket = io("https://battleship-server-4725bfddd6bf.herokuapp.com", {
     transports: ["websocket"],
   });
-  callback(socket, socket.disconnect);
+  callback(socket);
 };
 
 const LaunchRequestHandler = {
@@ -87,7 +87,7 @@ const AttackIntentHandler = {
       Alexa.getIntentName(handlerInput.requestEnvelope) === "AttackIntent"
     );
   },
-  handle(handlerInput) {
+  async handle(handlerInput) {
     let speakOutput;
     const roomId = handlerInput.attributesManager.getSessionAttributes().roomId;
     if (!roomId) {
@@ -99,18 +99,41 @@ const AttackIntentHandler = {
         speakOutput = `Die Koordinate ${xy} entspricht nicht der vorgeschriebenen Form.`;
       } else {
         const [x, y] = xy.split("");
-        connectAndRelease((socket, requestCallback) => {
-          socket.emit(
-            "alexaAttack",
-            {
-              roomId: roomId.replace(".", "").slice(0, -1),
-              playerNo: playerNo,
-              coord: { x: x.charCodeAt(0) - 97, y: y - 1 },
-            },
-            requestCallback
-          );
-        });
-        speakOutput = `Angriff auf ${x} ${y} gestartet.`;
+        try {
+          await new Promise((resolve, reject) => {
+            connectAndRelease((socket) => {
+              socket.emit(
+                "alexaAttack",
+                {
+                  roomId: roomId.replace(".", "").slice(0, -1),
+                  playerNo: playerNo,
+                  coord: { x: x.charCodeAt(0) - 97, y: y - 1 },
+                },
+                (error) => {
+                  socket.disconnect();
+                  if (error) {
+                    reject(
+                      new Error(
+                        "Es ist ein Fehler aufgetreten, der Angriff konnte nicht gestartet werden."
+                      )
+                    );
+                  } else {
+                    resolve(`Angriff auf ${x} ${y} gestartet.`);
+                  }
+                }
+              );
+            });
+          })
+            .then((result) => {
+              speakOutput = result;
+            })
+            .catch((error) => {
+              speakOutput = error.message;
+            });
+        } catch (error) {
+          speakOutput =
+            "Es konnte keine Verbindung zum Server hergestellt werden.";
+        }
       }
     }
 

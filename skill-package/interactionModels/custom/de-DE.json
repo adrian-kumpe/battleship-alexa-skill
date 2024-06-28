@@ -74,26 +74,18 @@
             {
               "name": "xy",
               "type": "AMAZON.AlphaNumeric",
-              "samples": [
-                "{xy}"
-              ]
+              "samples": ["{xy}"]
             }
           ],
           "name": "AttackIntent",
-          "samples": [
-            "Greife {xy} an",
-            "Attackiere {xy}",
-            "Attacke"
-          ]
+          "samples": ["Greife {xy} an", "Attackiere {xy}", "Attacke"]
         },
         {
           "slots": [
             {
               "name": "roomId",
               "type": "AMAZON.AlphaNumeric",
-              "samples": [
-                "{roomId}"
-              ]
+              "samples": ["{roomId}"]
             }
           ],
           "name": "RoomIntent",
